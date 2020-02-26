@@ -4,17 +4,19 @@
 #
 Name     : pcs
 Version  : 0.10.4
-Release  : 1
+Release  : 2
 URL      : https://github.com/ClusterLabs/pcs/archive/0.10.4.tar.gz
 Source0  : https://github.com/ClusterLabs/pcs/archive/0.10.4.tar.gz
-Summary  : No detailed summary available
+Summary  : Pacemaker command line interface and GUI
 Group    : Development/Tools
 License  : GPL-2.0
 Requires: pcs-bin = %{version}-%{release}
 Requires: pcs-license = %{version}-%{release}
 Requires: pcs-python = %{version}-%{release}
 Requires: pcs-python3 = %{version}-%{release}
+Requires: Pacemaker
 Requires: astroid
+Requires: dlm
 Requires: mypy
 Requires: pylint
 Requires: tornado
@@ -74,7 +76,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1582665815
+export SOURCE_DATE_EPOCH=1582740260
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
