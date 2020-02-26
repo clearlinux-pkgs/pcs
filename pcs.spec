@@ -4,7 +4,7 @@
 #
 Name     : pcs
 Version  : 0.10.4
-Release  : 2
+Release  : 3
 URL      : https://github.com/ClusterLabs/pcs/archive/0.10.4.tar.gz
 Source0  : https://github.com/ClusterLabs/pcs/archive/0.10.4.tar.gz
 Summary  : Pacemaker command line interface and GUI
@@ -14,6 +14,7 @@ Requires: pcs-bin = %{version}-%{release}
 Requires: pcs-license = %{version}-%{release}
 Requires: pcs-python = %{version}-%{release}
 Requires: pcs-python3 = %{version}-%{release}
+Requires: pcs-services = %{version}-%{release}
 Requires: Pacemaker
 Requires: astroid
 Requires: dlm
@@ -36,6 +37,7 @@ pcs daemon, which operates as a remote server for pcs and provides a web UI.
 Summary: bin components for the pcs package.
 Group: Binaries
 Requires: pcs-license = %{version}-%{release}
+Requires: pcs-services = %{version}-%{release}
 
 %description bin
 bin components for the pcs package.
@@ -67,6 +69,14 @@ Requires: python3-core
 python3 components for the pcs package.
 
 
+%package services
+Summary: services components for the pcs package.
+Group: Systemd services
+
+%description services
+services components for the pcs package.
+
+
 %prep
 %setup -q -n pcs-0.10.4
 cd %{_builddir}/pcs-0.10.4
@@ -76,7 +86,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1582740260
+export SOURCE_DATE_EPOCH=1582745723
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -98,6 +108,10 @@ python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
+## install_append content
+mkdir -p %{buildroot}/usr/lib/systemd/system
+install pcsd/pcsd.service %{buildroot}/usr/lib/systemd/system/
+## install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -119,3 +133,7 @@ echo ----[ mark ]----
 %files python3
 %defattr(-,root,root,-)
 /usr/lib/python3*/*
+
+%files services
+%defattr(-,root,root,-)
+/usr/lib/systemd/system/pcsd.service
