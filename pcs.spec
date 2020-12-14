@@ -4,7 +4,7 @@
 #
 Name     : pcs
 Version  : 0.10.7
-Release  : 5
+Release  : 6
 URL      : https://github.com/ClusterLabs/pcs/archive/0.10.7/pcs-0.10.7.tar.gz
 Source0  : https://github.com/ClusterLabs/pcs/archive/0.10.7/pcs-0.10.7.tar.gz
 Summary  : Pacemaker command line interface and GUI
