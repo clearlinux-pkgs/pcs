@@ -4,7 +4,7 @@
 #
 Name     : pcs
 Version  : 0.10.8
-Release  : 16
+Release  : 17
 URL      : https://github.com/ClusterLabs/pcs/archive/0.10.8/pcs-0.10.8.tar.gz
 Source0  : https://github.com/ClusterLabs/pcs/archive/0.10.8/pcs-0.10.8.tar.gz
 Summary  : Pacemaker command line interface and GUI
@@ -16,27 +16,16 @@ Requires: pcs-python = %{version}-%{release}
 Requires: pcs-python3 = %{version}-%{release}
 Requires: pcs-services = %{version}-%{release}
 Requires: Pacemaker
-Requires: astroid
-Requires: black
-Requires: dacite
 Requires: distro
 Requires: dlm
-Requires: mypy
-Requires: pylint
-Requires: python-dateutil
-Requires: tornado
-BuildRequires : Pacemaker
-BuildRequires : astroid
-BuildRequires : black
 BuildRequires : buildreq-distutils3
-BuildRequires : dacite
-BuildRequires : distro
-BuildRequires : dlm
-BuildRequires : mypy
-BuildRequires : pylint
-BuildRequires : pyparsing
-BuildRequires : python-dateutil
-BuildRequires : tornado
+BuildRequires : pypi(astroid)
+BuildRequires : pypi(black)
+BuildRequires : pypi(dacite)
+BuildRequires : pypi(mypy)
+BuildRequires : pypi(pylint)
+BuildRequires : pypi(python_dateutil)
+BuildRequires : pypi(tornado)
 
 %description
 ## PCS - Pacemaker/Corosync Configuration System
@@ -75,6 +64,13 @@ python components for the pcs package.
 Summary: python3 components for the pcs package.
 Group: Default
 Requires: python3-core
+Requires: pypi(astroid)
+Requires: pypi(black)
+Requires: pypi(dacite)
+Requires: pypi(mypy)
+Requires: pypi(pylint)
+Requires: pypi(python_dateutil)
+Requires: pypi(tornado)
 
 %description python3
 python3 components for the pcs package.
@@ -97,17 +93,17 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1613615089
+export SOURCE_DATE_EPOCH=1641521642
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=auto "
 export MAKEFLAGS=%{?_smp_mflags}
-python3 setup.py build
+python3 -m build --wheel --skip-dependency-check --no-isolation
 
 %install
 export MAKEFLAGS=%{?_smp_mflags}
@@ -115,7 +111,7 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/pcs
 cp %{_builddir}/pcs-0.10.8/COPYING %{buildroot}/usr/share/package-licenses/pcs/4cc77b90af91e615a64ae04893fdffa7939db84c
 cp %{_builddir}/pcs-0.10.8/pcs/COPYING %{buildroot}/usr/share/package-licenses/pcs/4cc77b90af91e615a64ae04893fdffa7939db84c
-python3 -tt setup.py build  install --root=%{buildroot}
+pip install --root=%{buildroot} --no-deps --ignore-installed dist/*.whl
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----

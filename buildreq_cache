@@ -1,0 +1,8 @@
+0.10.8
+pypi(astroid)
+pypi(black)
+pypi(dacite)
+pypi(mypy)
+pypi(pylint)
+pypi(python_dateutil)
+pypi(tornado)
