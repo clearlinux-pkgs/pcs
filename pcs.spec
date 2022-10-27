@@ -4,7 +4,7 @@
 #
 Name     : pcs
 Version  : 0.10.8
-Release  : 18
+Release  : 19
 URL      : https://github.com/ClusterLabs/pcs/archive/0.10.8/pcs-0.10.8.tar.gz
 Source0  : https://github.com/ClusterLabs/pcs/archive/0.10.8/pcs-0.10.8.tar.gz
 Summary  : Pacemaker command line interface and GUI
@@ -26,6 +26,7 @@ BuildRequires : pypi(mypy)
 BuildRequires : pypi(pylint)
 BuildRequires : pypi(python_dateutil)
 BuildRequires : pypi(tornado)
+BuildRequires : pypi-distro
 
 %description
 ## PCS - Pacemaker/Corosync Configuration System
@@ -64,13 +65,6 @@ python components for the pcs package.
 Summary: python3 components for the pcs package.
 Group: Default
 Requires: python3-core
-Requires: pypi(astroid)
-Requires: pypi(black)
-Requires: pypi(dacite)
-Requires: pypi(mypy)
-Requires: pypi(pylint)
-Requires: pypi(python_dateutil)
-Requires: pypi(tornado)
 
 %description python3
 python3 components for the pcs package.
@@ -87,13 +81,16 @@ services components for the pcs package.
 %prep
 %setup -q -n pcs-0.10.8
 cd %{_builddir}/pcs-0.10.8
+pushd ..
+cp -a pcs-0.10.8 buildavx2
+popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1641521642
+export SOURCE_DATE_EPOCH=1666902059
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -104,21 +101,39 @@ export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
 export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=auto "
 export MAKEFLAGS=%{?_smp_mflags}
 python3 -m build --wheel --skip-dependency-check --no-isolation
+pushd ../buildavx2/
+export CFLAGS="$CFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
+export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
+export FFLAGS="$FFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
+export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v3 "
+export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3 "
+python3 -m build --wheel --skip-dependency-check --no-isolation
+
+popd
 
 %install
 export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/pcs
-cp %{_builddir}/pcs-0.10.8/COPYING %{buildroot}/usr/share/package-licenses/pcs/4cc77b90af91e615a64ae04893fdffa7939db84c
-cp %{_builddir}/pcs-0.10.8/pcs/COPYING %{buildroot}/usr/share/package-licenses/pcs/4cc77b90af91e615a64ae04893fdffa7939db84c
+cp %{_builddir}/pcs-%{version}/COPYING %{buildroot}/usr/share/package-licenses/pcs/4cc77b90af91e615a64ae04893fdffa7939db84c || :
+cp %{_builddir}/pcs-%{version}/pcs/COPYING %{buildroot}/usr/share/package-licenses/pcs/4cc77b90af91e615a64ae04893fdffa7939db84c || :
 pip install --root=%{buildroot} --no-deps --ignore-installed dist/*.whl
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
+pushd ../buildavx2/
+export CFLAGS="$CFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
+export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
+export FFLAGS="$FFLAGS -m64 -march=x86-64-v3 -Wl,-z,x86-64-v3 "
+export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v3 "
+export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3 "
+pip install --root=%{buildroot}-v3 --no-deps --ignore-installed dist/*.whl
+popd
 ## install_append content
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install pcsd/pcsd.service %{buildroot}/usr/lib/systemd/system/
 ## install_append end
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot} %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
