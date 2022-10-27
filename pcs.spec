@@ -4,7 +4,7 @@
 #
 Name     : pcs
 Version  : 0.10.8
-Release  : 20
+Release  : 21
 URL      : https://github.com/ClusterLabs/pcs/archive/0.10.8/pcs-0.10.8.tar.gz
 Source0  : https://github.com/ClusterLabs/pcs/archive/0.10.8/pcs-0.10.8.tar.gz
 Summary  : Pacemaker command line interface and GUI
@@ -17,7 +17,6 @@ Requires: pcs-python3 = %{version}-%{release}
 Requires: pcs-services = %{version}-%{release}
 Requires: Pacemaker
 Requires: dlm
-Requires: pypi-distro
 BuildRequires : buildreq-distutils3
 BuildRequires : pypi(astroid)
 BuildRequires : pypi(black)
@@ -65,6 +64,7 @@ python components for the pcs package.
 Summary: python3 components for the pcs package.
 Group: Default
 Requires: python3-core
+Requires: pypi(distro)
 
 %description python3
 python3 components for the pcs package.
@@ -90,7 +90,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1666906347
+export SOURCE_DATE_EPOCH=1666907972
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -115,8 +115,8 @@ popd
 export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/pcs
-cp %{_builddir}/pcs-%{version}/COPYING %{buildroot}/usr/share/package-licenses/pcs/4cc77b90af91e615a64ae04893fdffa7939db84c || :
-cp %{_builddir}/pcs-%{version}/pcs/COPYING %{buildroot}/usr/share/package-licenses/pcs/4cc77b90af91e615a64ae04893fdffa7939db84c || :
+cp %{_builddir}/pcs-%{version}/COPYING %{buildroot}/usr/share/package-licenses/pcs/4cc77b90af91e615a64ae04893fdffa7939db84c
+cp %{_builddir}/pcs-%{version}/pcs/COPYING %{buildroot}/usr/share/package-licenses/pcs/4cc77b90af91e615a64ae04893fdffa7939db84c
 pip install --root=%{buildroot} --no-deps --ignore-installed dist/*.whl
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
