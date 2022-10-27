@@ -4,7 +4,7 @@
 #
 Name     : pcs
 Version  : 0.10.8
-Release  : 19
+Release  : 20
 URL      : https://github.com/ClusterLabs/pcs/archive/0.10.8/pcs-0.10.8.tar.gz
 Source0  : https://github.com/ClusterLabs/pcs/archive/0.10.8/pcs-0.10.8.tar.gz
 Summary  : Pacemaker command line interface and GUI
@@ -16,8 +16,8 @@ Requires: pcs-python = %{version}-%{release}
 Requires: pcs-python3 = %{version}-%{release}
 Requires: pcs-services = %{version}-%{release}
 Requires: Pacemaker
-Requires: distro
 Requires: dlm
+Requires: pypi-distro
 BuildRequires : buildreq-distutils3
 BuildRequires : pypi(astroid)
 BuildRequires : pypi(black)
@@ -90,7 +90,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1666902059
+export SOURCE_DATE_EPOCH=1666906347
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
